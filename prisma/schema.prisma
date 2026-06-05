@@ -12,10 +12,87 @@ datasource db {
   provider = "postgresql"
 }
 
+enum UserRole {
+  OWNER
+  FATHER
+  MOTHER
+  GODFATHER
+  GODMOTHER
+  FAMILY
+}
+
+enum MediaType {
+  PHOTO
+  VIDEO
+  AUDIO
+}
+
 model User {
   id        String   @id @default(uuid())
   name      String
   email     String   @unique
-  role      String
+  role      UserRole
   createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+}
+
+model Child {
+  id              String   @id @default(uuid())
+  firstName       String
+  lastName        String?
+  birthDate       DateTime?
+  biography       String?
+  profileImageUrl String?
+
+  memories Memory[]
+  letters Letter[]
+
+  createdAt       DateTime @default(now())
+  updatedAt       DateTime @updatedAt
+}
+
+model Memory {
+  id          String   @id @default(uuid())
+  title       String
+  description String?
+  memoryDate  DateTime
+  category    String?
+
+  childId     String
+  child       Child    @relation(fields: [childId], references: [id])
+
+  media Media[]
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  
+}
+
+model Media {
+  id          String    @id @default(uuid())
+  type        MediaType
+
+  fileName    String
+  fileUrl     String
+
+  memoryId    String
+  memory      Memory    @relation(fields: [memoryId], references: [id])
+
+  createdAt   DateTime  @default(now())
+}
+
+model Letter {
+  id          String   @id @default(uuid())
+
+  title       String
+  content     String
+
+  unlockDate  DateTime
+
+  childId     String
+  child       Child    @relation(fields: [childId], references: [id])
+
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
 }
