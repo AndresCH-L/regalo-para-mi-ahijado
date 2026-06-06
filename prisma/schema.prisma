@@ -10,6 +10,7 @@ generator client {
 
 datasource db {
   provider = "postgresql"
+  url      = env("DATABASE_URL")
 }
 
 enum UserRole {
@@ -40,6 +41,9 @@ model Child {
   id              String   @id @default(uuid())
   firstName       String
   lastName        String?
+
+  slug String? @unique
+
   birthDate       DateTime?
   biography       String?
   profileImageUrl String?
@@ -51,12 +55,24 @@ model Child {
   updatedAt       DateTime @updatedAt
 }
 
+enum MemoryCategory {
+  EMBARAZO
+  NACIMIENTO
+  CUMPLEANOS
+  COLEGIO
+  VIAJE
+  DEPORTE
+  LOGRO
+  FAMILIA
+  OTRO
+}
+
 model Memory {
   id          String   @id @default(uuid())
   title       String
   description String?
   memoryDate  DateTime
-  category    String?
+  category MemoryCategory
 
   childId     String
   child       Child    @relation(fields: [childId], references: [id])
@@ -86,6 +102,7 @@ model Letter {
   id          String   @id @default(uuid())
 
   title       String
+  author      String
   content     String
 
   unlockDate  DateTime
@@ -93,6 +110,20 @@ model Letter {
   childId     String
   child       Child    @relation(fields: [childId], references: [id])
 
+  media       LetterMedia[]
+
   createdAt   DateTime @default(now())
   updatedAt   DateTime @updatedAt
+}
+
+model LetterMedia {
+  id         String   @id @default(uuid())
+
+  fileUrl    String
+  fileType   String
+
+  letterId   String
+  letter     Letter @relation(fields: [letterId], references: [id])
+
+  createdAt  DateTime @default(now())
 }
