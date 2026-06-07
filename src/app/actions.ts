@@ -104,3 +104,35 @@ export async function updateChild(
 
   revalidatePath("/dashboard");
 }
+
+export async function updateMemory(
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+
+  const title =
+    formData.get("title") as string;
+
+  const description =
+    formData.get("description") as string;
+
+  const memoryDate =
+    formData.get("memoryDate") as string;
+
+  const category =
+    formData.get("category") as string;
+
+  await prisma.memory.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      description,
+      memoryDate: new Date(memoryDate),
+      category: category as any,
+    },
+  });
+
+  revalidatePath("/");
+}

@@ -1,5 +1,6 @@
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import Link from "next/link";
 
 type Props = {
   params: Promise<{
@@ -34,6 +35,12 @@ export default async function MemoryPage({
       }}
     >
       <h1>{memory.title}</h1>
+
+<Link
+  href={`/memory/${memory.id}/edit`}
+>
+  ✏️ Editar Recuerdo
+</Link>
 
       <p>
         {new Date(
