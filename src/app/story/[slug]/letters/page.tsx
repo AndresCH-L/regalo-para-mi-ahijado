@@ -68,7 +68,17 @@ export default async function LettersPage({
               }}
             >
               <h3>{letter.title}</h3>
-
+            <div
+              style={{
+                marginBottom: "1rem",
+              }}
+            >
+              <Link
+                href={`/letters/${letter.id}/edit`}
+              >
+                ✏️ Editar Carta
+              </Link>
+            </div>
               {!unlocked ? (
                 <>
                   <p>

@@ -1,7 +1,7 @@
 import Image from "next/image";
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
-import Link from "next/link";
 
 type Props = {
   params: Promise<{
@@ -9,18 +9,41 @@ type Props = {
   }>;
 };
 
-export default async function StoryPage({ params }: Props) {
+export default async function StoryPage({
+  params,
+}: Props) {
   const { slug } = await params;
 
   const child = await prisma.child.findUnique({
     where: {
       slug,
     },
+    include: {
+      memories: {
+        include: {
+          media: true,
+        },
+      },
+      letters: true,
+    },
   });
 
   if (!child) {
     notFound();
   }
+
+  const memoriesCount =
+    child.memories.length;
+
+  const lettersCount =
+    child.letters.length;
+
+  const photosCount =
+    child.memories.reduce(
+      (total, memory) =>
+        total + memory.media.length,
+      0
+    );
 
   return (
     <main
@@ -38,7 +61,7 @@ export default async function StoryPage({ params }: Props) {
       <Image
         src={
           child.profileImageUrl ||
-          "/uploads/children/mael.jpg"
+          "/uploads/children/mael.jpeg"
         }
         alt={child.firstName}
         width={250}
@@ -47,7 +70,8 @@ export default async function StoryPage({ params }: Props) {
           borderRadius: "50%",
           objectFit: "cover",
           marginBottom: "2rem",
-          boxShadow: "0 10px 30px rgba(0,0,0,0.15)",
+          boxShadow:
+            "0 10px 30px rgba(0,0,0,0.15)",
         }}
       />
 
@@ -66,20 +90,68 @@ export default async function StoryPage({ params }: Props) {
           maxWidth: "700px",
         }}
       >
-        Esta es tu historia.
+        Esta historia fue creada especialmente
+        para ti.
       </p>
+
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexWrap: "wrap",
+          justifyContent: "center",
+          marginTop: "2rem",
+        }}
+      >
+        <div
+          style={{
+            padding: "1rem",
+            border: "1px solid #ddd",
+            borderRadius: "12px",
+            minWidth: "180px",
+          }}
+        >
+          <h2>{memoriesCount}</h2>
+          <p>📖 Recuerdos</p>
+        </div>
+
+        <div
+          style={{
+            padding: "1rem",
+            border: "1px solid #ddd",
+            borderRadius: "12px",
+            minWidth: "180px",
+          }}
+        >
+          <h2>{lettersCount}</h2>
+          <p>💌 Cartas</p>
+        </div>
+
+        <div
+          style={{
+            padding: "1rem",
+            border: "1px solid #ddd",
+            borderRadius: "12px",
+            minWidth: "180px",
+          }}
+        >
+          <h2>{photosCount}</h2>
+          <p>📸 Fotografías</p>
+        </div>
+      </div>
 
       <p
         style={{
-          marginTop: "1rem",
+          marginTop: "2rem",
           maxWidth: "700px",
           lineHeight: "1.8",
         }}
       >
-        Este espacio fue creado especialmente para ti.
-        Aquí encontrarás fotografías, recuerdos,
-        videos, cartas y momentos importantes que
-        hemos guardado durante toda tu vida.
+        Tu padrino y tu familia han estado
+        guardando recuerdos, fotografías,
+        cartas y momentos importantes para que
+        algún día puedas recorrer tu propia
+        historia paso a paso.
       </p>
 
       <div
@@ -129,6 +201,7 @@ export default async function StoryPage({ params }: Props) {
         >
           📸 Mis Fotos
         </Link>
+
         <Link
           href={`/story/${child.slug}/videos`}
           style={{
@@ -137,23 +210,23 @@ export default async function StoryPage({ params }: Props) {
             backgroundColor: "#f59e0b",
             color: "white",
             textDecoration: "none",
-            }}
+          }}
         >
-  🎥 Mis Videos
-</Link>
+          🎥 Mis Videos
+        </Link>
 
-<Link
-  href={`/story/${child.slug}/audios`}
-  style={{
-    padding: "1rem 2rem",
-    borderRadius: "12px",
-    backgroundColor: "#10b981",
-    color: "white",
-    textDecoration: "none",
-  }}
->
-  🎵 Mis Audios
-</Link>
+        <Link
+          href={`/story/${child.slug}/audios`}
+          style={{
+            padding: "1rem 2rem",
+            borderRadius: "12px",
+            backgroundColor: "#10b981",
+            color: "white",
+            textDecoration: "none",
+          }}
+        >
+          🎵 Mis Audios
+        </Link>
       </div>
 
       <div

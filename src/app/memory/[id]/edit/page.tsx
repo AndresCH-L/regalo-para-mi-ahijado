@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 import { updateMemory } from "@/app/actions";
@@ -17,6 +18,9 @@ export default async function EditMemoryPage({
     where: {
       id,
     },
+    include: {
+      media: true,
+    },
   });
 
   if (!memory) {
@@ -26,12 +30,12 @@ export default async function EditMemoryPage({
   return (
     <main
       style={{
-        maxWidth: "800px",
+        maxWidth: "900px",
         margin: "0 auto",
         padding: "2rem",
       }}
     >
-      <h1>Editar Recuerdo</h1>
+      <h1>✏️ Editar Recuerdo</h1>
 
       <form action={updateMemory}>
         <input
@@ -78,41 +82,15 @@ export default async function EditMemoryPage({
             name="category"
             defaultValue={memory.category}
           >
-            <option value="EMBARAZO">
-              EMBARAZO
-            </option>
-
-            <option value="NACIMIENTO">
-              NACIMIENTO
-            </option>
-
-            <option value="CUMPLEANOS">
-              CUMPLEANOS
-            </option>
-
-            <option value="COLEGIO">
-              COLEGIO
-            </option>
-
-            <option value="VIAJE">
-              VIAJE
-            </option>
-
-            <option value="DEPORTE">
-              DEPORTE
-            </option>
-
-            <option value="LOGRO">
-              LOGRO
-            </option>
-
-            <option value="FAMILIA">
-              FAMILIA
-            </option>
-
-            <option value="OTRO">
-              OTRO
-            </option>
+            <option value="EMBARAZO">EMBARAZO</option>
+            <option value="NACIMIENTO">NACIMIENTO</option>
+            <option value="CUMPLEANOS">CUMPLEANOS</option>
+            <option value="COLEGIO">COLEGIO</option>
+            <option value="VIAJE">VIAJE</option>
+            <option value="DEPORTE">DEPORTE</option>
+            <option value="LOGRO">LOGRO</option>
+            <option value="FAMILIA">FAMILIA</option>
+            <option value="OTRO">OTRO</option>
           </select>
         </div>
 
@@ -120,7 +98,6 @@ export default async function EditMemoryPage({
 
         <div>
           <label>Descripción</label>
-
           <br />
 
           <textarea
@@ -138,6 +115,75 @@ export default async function EditMemoryPage({
           Guardar Cambios
         </button>
       </form>
+
+      <hr
+        style={{
+          marginTop: "3rem",
+          marginBottom: "3rem",
+        }}
+      />
+
+      <h2>📸 Multimedia</h2>
+
+      <p>
+        Fotos, videos y audios asociados a este
+        recuerdo.
+      </p>
+
+      <br />
+
+      <div
+        style={{
+          display: "flex",
+          gap: "1rem",
+          flexWrap: "wrap",
+        }}
+      >
+        <Link
+          href={`/memory/${memory.id}`}
+        >
+          👁️ Ver Recuerdo
+        </Link>
+
+        <Link
+          href={`/story`}
+        >
+          📷 Agregar Foto
+        </Link>
+
+        <Link
+          href={`/story`}
+        >
+          🎥 Agregar Video
+        </Link>
+
+        <Link
+          href={`/story`}
+        >
+          🎵 Agregar Audio
+        </Link>
+      </div>
+
+      <br />
+      <br />
+
+      <h3>
+        Archivos registrados ({memory.media.length})
+      </h3>
+
+      {memory.media.length === 0 ? (
+        <p>
+          Todavía no existen archivos asociados.
+        </p>
+      ) : (
+        <ul>
+          {memory.media.map((item) => (
+            <li key={item.id}>
+              {item.fileName}
+            </li>
+          ))}
+        </ul>
+      )}
     </main>
   );
 }

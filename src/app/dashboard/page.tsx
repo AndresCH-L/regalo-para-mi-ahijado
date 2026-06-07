@@ -1,4 +1,5 @@
 import Link from "next/link";
+import Image from "next/image";
 import { prisma } from "@/lib/prisma";
 
 export default async function DashboardPage() {
@@ -106,7 +107,6 @@ export default async function DashboardPage() {
         >
           👥 Usuarios
         </Link>
-
       </div>
 
       <br />
@@ -129,50 +129,69 @@ export default async function DashboardPage() {
               key={child.id}
               style={{
                 border: "1px solid #ddd",
-                borderRadius: "12px",
+                borderRadius: "16px",
                 padding: "1rem",
+                display: "flex",
+                gap: "1.5rem",
+                alignItems: "center",
               }}
             >
-              <h3>
-                {child.firstName}
-                {" "}
-                {child.lastName}
-              </h3>
-
-              <p>
-                Slug:
-                {" "}
-                {child.slug}
-              </p>
-
-              <div
+              <Image
+                src={
+                  child.profileImageUrl ||
+                  "/uploads/children/mael.jpeg"
+                }
+                alt={child.firstName}
+                width={100}
+                height={100}
                 style={{
-                  display: "flex",
-                  gap: "1rem",
-                  flexWrap: "wrap",
+                  borderRadius: "50%",
+                  objectFit: "cover",
                 }}
-              >
-                <Link
-                  href={`/story/${child.slug}`}
-                >
-                  Ver Historia
-                </Link>
-                <Link
-                  href={`/child/${child.id}/edit`}
-                >
-                  Editar
-                </Link>
-                <Link
-                  href={`/story/${child.slug}/timeline`}
-                >
-                  Timeline
-                </Link>
+              />
 
-                <Link
-                  href={`/story/${child.slug}/letters`}
+              <div>
+                <h3>
+                  {child.firstName}{" "}
+                  {child.lastName}
+                </h3>
+
+                <p>
+                  Slug: {child.slug}
+                </p>
+
+                <div
+                  style={{
+                    display: "flex",
+                    gap: "1rem",
+                    flexWrap: "wrap",
+                    marginTop: "0.5rem",
+                  }}
                 >
-                  Cartas
-                </Link>
+                  <Link
+                    href={`/story/${child.slug}`}
+                  >
+                    📖 Ver Historia
+                  </Link>
+
+                  <Link
+                    href={`/child/${child.id}/edit`}
+                  >
+                    ✏️ Editar
+                  </Link>
+
+                  <Link
+                    href={`/story/${child.slug}/timeline`}
+                  >
+                    🕒 Timeline
+                  </Link>
+
+                  <Link
+                    href={`/story/${child.slug}/letters`}
+                  >
+                    💌 Cartas
+                  </Link>
+                </div>
               </div>
             </div>
           ))}

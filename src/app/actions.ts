@@ -159,3 +159,35 @@ export async function createUser(
 
   revalidatePath("/users");
 }
+
+export async function updateLetter(
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+
+  const title =
+    formData.get("title") as string;
+
+  const author =
+    formData.get("author") as string;
+
+  const content =
+    formData.get("content") as string;
+
+  const unlockDate =
+    formData.get("unlockDate") as string;
+
+  await prisma.letter.update({
+    where: {
+      id,
+    },
+    data: {
+      title,
+      author,
+      content,
+      unlockDate: new Date(unlockDate),
+    },
+  });
+
+  revalidatePath("/");
+}
