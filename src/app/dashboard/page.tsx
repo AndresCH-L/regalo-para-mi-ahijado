@@ -143,7 +143,11 @@ export default async function DashboardPage() {
                 >
                   Ver Historia
                 </Link>
-
+                <Link
+                  href={`/child/${child.id}/edit`}
+                >
+                  Editar
+                </Link>
                 <Link
                   href={`/story/${child.slug}/timeline`}
                 >

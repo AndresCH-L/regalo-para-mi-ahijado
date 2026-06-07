@@ -70,3 +70,37 @@ export async function createLetter(
 
   revalidatePath(`/story/${slug}/letters`);
 }
+
+export async function updateChild(
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+
+  const firstName =
+    formData.get("firstName") as string;
+
+  const lastName =
+    formData.get("lastName") as string;
+
+  const birthDate =
+    formData.get("birthDate") as string;
+
+  const biography =
+    formData.get("biography") as string;
+
+  await prisma.child.update({
+    where: {
+      id,
+    },
+    data: {
+      firstName,
+      lastName: lastName || null,
+      birthDate: birthDate
+        ? new Date(birthDate)
+        : null,
+      biography: biography || null,
+    },
+  });
+
+  revalidatePath("/dashboard");
+}
