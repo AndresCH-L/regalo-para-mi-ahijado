@@ -225,3 +225,73 @@ export async function deleteMemory(
 
   revalidatePath("/");
 }
+
+export async function deleteChild(
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+
+  const memories =
+    await prisma.memory.findMany({
+      where: {
+        childId: id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+  const memoryIds = memories.map(
+    (m) => m.id
+  );
+
+  await prisma.media.deleteMany({
+    where: {
+      memoryId: {
+        in: memoryIds,
+      },
+    },
+  });
+
+  await prisma.memory.deleteMany({
+    where: {
+      childId: id,
+    },
+  });
+
+  const letters =
+    await prisma.letter.findMany({
+      where: {
+        childId: id,
+      },
+      select: {
+        id: true,
+      },
+    });
+
+  const letterIds = letters.map(
+    (l) => l.id
+  );
+
+  await prisma.letterMedia.deleteMany({
+    where: {
+      letterId: {
+        in: letterIds,
+      },
+    },
+  });
+
+  await prisma.letter.deleteMany({
+    where: {
+      childId: id,
+    },
+  });
+
+  await prisma.child.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath("/dashboard");
+}

@@ -1,6 +1,7 @@
 import Link from "next/link";
 import Image from "next/image";
 import { prisma } from "@/lib/prisma";
+import { deleteChild } from "@/app/actions";
 
 export default async function DashboardPage() {
   const children = await prisma.child.findMany();
@@ -43,7 +44,6 @@ export default async function DashboardPage() {
           }}
         >
           <h2>👶 Ahijados</h2>
-
           <h3>{children.length}</h3>
         </div>
 
@@ -55,7 +55,6 @@ export default async function DashboardPage() {
           }}
         >
           <h2>📖 Recuerdos</h2>
-
           <h3>{memoriesCount}</h3>
         </div>
 
@@ -67,7 +66,6 @@ export default async function DashboardPage() {
           }}
         >
           <h2>💌 Cartas</h2>
-
           <h3>{lettersCount}</h3>
         </div>
       </div>
@@ -191,6 +189,27 @@ export default async function DashboardPage() {
                   >
                     💌 Cartas
                   </Link>
+
+                  <form action={deleteChild}>
+                    <input
+                      type="hidden"
+                      name="id"
+                      value={child.id}
+                    />
+
+                    <button
+                      type="submit"
+                      style={{
+                        border: "none",
+                        background: "transparent",
+                        color: "red",
+                        cursor: "pointer",
+                        fontWeight: "bold",
+                      }}
+                    >
+                      🗑 Eliminar Ahijado
+                    </button>
+                  </form>
                 </div>
               </div>
             </div>
