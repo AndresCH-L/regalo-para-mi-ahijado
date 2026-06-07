@@ -1,3 +1,4 @@
+import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
 
@@ -43,30 +44,47 @@ export default async function TimelinePage({
 
       {child.memories.length === 0 ? (
         <p>
-          Todavía no existen recuerdos
-          registrados.
+          Todavía no existen recuerdos registrados.
         </p>
       ) : (
         child.memories.map((memory) => (
-          <div
+          <Link
             key={memory.id}
+            href={`/memory/${memory.id}`}
             style={{
-              border: "1px solid #ddd",
-              borderRadius: "12px",
-              padding: "1rem",
-              marginBottom: "1rem",
+              textDecoration: "none",
+              color: "inherit",
             }}
           >
-            <h2>{memory.title}</h2>
+            <div
+              style={{
+                border: "1px solid #ddd",
+                borderRadius: "12px",
+                padding: "1rem",
+                marginBottom: "1rem",
+                cursor: "pointer",
+              }}
+            >
+              <h2>{memory.title}</h2>
 
-            <p>{memory.description}</p>
+              <p>{memory.description}</p>
 
-            <small>
-              {new Date(
-                memory.memoryDate
-              ).toLocaleDateString()}
-            </small>
-          </div>
+              <small>
+                {new Date(
+                  memory.memoryDate
+                ).toLocaleDateString()}
+              </small>
+
+              <p
+                style={{
+                  marginTop: "1rem",
+                  color: "#ec4899",
+                }}
+              >
+                Ver recuerdo →
+              </p>
+            </div>
+          </Link>
         ))
       )}
     </main>

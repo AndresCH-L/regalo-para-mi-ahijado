@@ -129,6 +129,31 @@ export default async function StoryPage({ params }: Props) {
         >
           📸 Mis Fotos
         </Link>
+        <Link
+          href={`/story/${child.slug}/videos`}
+          style={{
+            padding: "1rem 2rem",
+            borderRadius: "12px",
+            backgroundColor: "#f59e0b",
+            color: "white",
+            textDecoration: "none",
+            }}
+        >
+  🎥 Mis Videos
+</Link>
+
+<Link
+  href={`/story/${child.slug}/audios`}
+  style={{
+    padding: "1rem 2rem",
+    borderRadius: "12px",
+    backgroundColor: "#10b981",
+    color: "white",
+    textDecoration: "none",
+  }}
+>
+  🎵 Mis Audios
+</Link>
       </div>
 
       <div
