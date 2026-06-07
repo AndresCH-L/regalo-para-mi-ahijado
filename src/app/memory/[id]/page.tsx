@@ -2,6 +2,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
 import { notFound } from "next/navigation";
+import { deleteMemory } from "@/app/actions";
 
 type Props = {
   params: Promise<{
@@ -37,16 +38,46 @@ export default async function MemoryPage({
     >
       <h1>{memory.title}</h1>
 
-      <Link
-        href={`/memory/${memory.id}/edit`}
+      <div
         style={{
-          color: "#ec4899",
-          textDecoration: "none",
-          fontWeight: "bold",
+          display: "flex",
+          gap: "1rem",
+          alignItems: "center",
+          marginBottom: "1rem",
         }}
       >
-        ✏️ Editar Recuerdo
-      </Link>
+        <Link
+          href={`/memory/${memory.id}/edit`}
+          style={{
+            color: "#ec4899",
+            textDecoration: "none",
+            fontWeight: "bold",
+          }}
+        >
+          ✏️ Editar Recuerdo
+        </Link>
+
+        <form action={deleteMemory}>
+          <input
+            type="hidden"
+            name="id"
+            value={memory.id}
+          />
+
+          <button
+            type="submit"
+            style={{
+              border: "none",
+              background: "transparent",
+              color: "red",
+              cursor: "pointer",
+              fontWeight: "bold",
+            }}
+          >
+            🗑 Eliminar Recuerdo
+          </button>
+        </form>
+      </div>
 
       <p
         style={{

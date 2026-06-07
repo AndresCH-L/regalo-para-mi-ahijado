@@ -205,3 +205,23 @@ export async function deleteLetter(
 
   revalidatePath("/");
 }
+
+export async function deleteMemory(
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+
+  await prisma.media.deleteMany({
+    where: {
+      memoryId: id,
+    },
+  });
+
+  await prisma.memory.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath("/");
+}
