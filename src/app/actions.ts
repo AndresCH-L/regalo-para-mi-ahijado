@@ -191,3 +191,17 @@ export async function updateLetter(
 
   revalidatePath("/");
 }
+
+export async function deleteLetter(
+  formData: FormData
+) {
+  const id = formData.get("id") as string;
+
+  await prisma.letter.delete({
+    where: {
+      id,
+    },
+  });
+
+  revalidatePath("/");
+}

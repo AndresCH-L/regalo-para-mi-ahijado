@@ -1,5 +1,8 @@
 import Link from "next/link";
 import { prisma } from "@/lib/prisma";
+import {
+  deleteLetter,
+} from "@/app/actions";
 
 type Props = {
   params: Promise<{
@@ -73,11 +76,39 @@ export default async function LettersPage({
                 marginBottom: "1rem",
               }}
             >
-              <Link
-                href={`/letters/${letter.id}/edit`}
+                <div
+                style={{
+                  display: "flex",
+                  gap: "1rem",
+                  marginBottom: "1rem",
+                }}
               >
-                ✏️ Editar Carta
-              </Link>
+                <Link
+                  href={`/story/${child.slug}/letters/${letter.id}/edit`}
+                >
+                  ✏️ Editar Carta
+                </Link>
+
+                <form action={deleteLetter}>
+                  <input
+                    type="hidden"
+                    name="id"
+                    value={letter.id}
+                  />
+
+                  <button
+                    type="submit"
+                    style={{
+                      border: "none",
+                      background: "transparent",
+                      color: "red",
+                      cursor: "pointer",
+                    }}
+                  >
+                    🗑 Eliminar
+                  </button>
+                </form>
+              </div>
             </div>
               {!unlocked ? (
                 <>

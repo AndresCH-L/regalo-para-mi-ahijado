@@ -4,6 +4,7 @@ import { updateLetter } from "@/app/actions";
 
 type Props = {
   params: Promise<{
+    slug: string;
     id: string;
   }>;
 };
