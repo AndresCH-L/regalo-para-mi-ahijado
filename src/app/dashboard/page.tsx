@@ -93,6 +93,20 @@ export default async function DashboardPage() {
         >
           ➕ Nuevo Ahijado
         </Link>
+
+        <Link
+          href="/users"
+          style={{
+            padding: "1rem",
+            borderRadius: "12px",
+            backgroundColor: "#6366f1",
+            color: "white",
+            textDecoration: "none",
+          }}
+        >
+          👥 Usuarios
+        </Link>
+
       </div>
 
       <br />

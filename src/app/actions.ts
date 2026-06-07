@@ -136,3 +136,26 @@ export async function updateMemory(
 
   revalidatePath("/");
 }
+
+export async function createUser(
+  formData: FormData
+) {
+  const name =
+    formData.get("name") as string;
+
+  const email =
+    formData.get("email") as string;
+
+  const role =
+    formData.get("role") as string;
+
+  await prisma.user.create({
+    data: {
+      name,
+      email,
+      role: role as any,
+    },
+  });
+
+  revalidatePath("/users");
+}
